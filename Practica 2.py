@@ -12,9 +12,15 @@ def letra_Aleatoria():
 #def replace_letters_with_random_digits(text):
     #return ''.join(random.choice(string.digits) if char.isalpha() else char for char in text)
 
-# Función para cambiar dígitos por letras mayúsculas aleatorias
+# Función para cambiar :dígitos por letras mayúsculas aleatorias
 #def replace_digits_with_random_letters(text):
     #return ''.join(random.choice(string.ascii_uppercase) if char.isdigit() else char for char in text)
+
+#def procesar_Item(ruta_Item):
+    #if os.path.isfile(ruta_Item):
+        #procesar_Archivos(ruta_Item)
+    #elif os.path.isdir(ruta_Item):
+        #carpeta_Procesada(ruta_Item)
 
 def procesar_Archivos(ruta_Archivo):
     with open(ruta_Archivo, 'r') as archivo:
@@ -32,7 +38,6 @@ def procesar_Archivos(ruta_Archivo):
             modificar_Contenido += char
 
     #nueva_Ruta_Archivo = ruta_Archivo 
-    print(modificar_Contenido)
     with open(ruta_Archivo, 'w') as nuevo_Archivo:
         nuevo_Archivo.write(modificar_Contenido)
 
@@ -40,20 +45,24 @@ def procesar_Archivos(ruta_Archivo):
         #archivo.write(contenido)
 
 def carpeta_Procesada(ruta_Carpeta):
-    for raiz, _, archivos in os.walk(ruta_Carpeta):
-        for archivo in archivos:
-            ruta_Archivos = os.path.join(raiz, archivo)
-            procesar_Archivos(ruta_Archivos)
+    for raiz, subcarpetas, archivos in os.walk(ruta_Carpeta):
+        for nombre_Carpetas in subcarpetas:
+            ruta_Subcarpeta = os.path.join(raiz, nombre_Carpetas)
+            nuevo_Nombre_Subcarpeta = ''.join(random.choice(string.digits) if char.isalpha() else random.choice(string.ascii_uppercase) for char in nombre_Carpetas)
 
-if __name__ == "__main__":
-    ruta_Carpeta = input("Ingrese la ruta de ubicacion de la carpeta: ")
+            carpeta_Original = os.path.dirname(ruta_Subcarpeta)
+            os.rename(ruta_Subcarpeta, os.path.join(carpeta_Original, nuevo_Nombre_Subcarpeta))
+            
+            carpeta_Procesada(os.path.join(carpeta_Original, nuevo_Nombre_Subcarpeta))
 
 
-    if os.path.exists(ruta_Carpeta):
-        carpeta_Salida = ruta_Carpeta + '_procesado'
-        shutil.copytree(ruta_Carpeta, carpeta_Salida)
+ruta_Carpeta = input("Ingrese la ruta de ubicacion de la carpeta: ")
 
-        carpeta_Procesada(carpeta_Salida)
+if os.path.exists(ruta_Carpeta):
+    carpeta_Salida = ruta_Carpeta + '_procesado'
+    shutil.copytree(ruta_Carpeta, carpeta_Salida)
 
-    else:
-        print("No existe la ruta")
+    carpeta_Procesada(carpeta_Salida)
+
+else:
+    print("No existe la ruta")
